@@ -1,4 +1,5 @@
 <?php
+
 /*
 Developer - Atul Singh
 Github - https://github.com/iamatulsingh
@@ -6,90 +7,105 @@ Telegram - https://t.me/developeratul
 
 @license     Code and contributions have 'MIT License'
              More details: LICENSE
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of 
-	the Software with proper credit to original author.
+
 */
-class InstaData{
+
+if(isset($_POST['submit'])){
+	require_once('insta_data_scrap.class.php');
+	$username = $_POST['usr'];
+	$insta = new InstaData();
+	$userDetails = $insta->getUserDetails($username);
+	$accountDetails = $insta->getAccountDetails($username);
+
+	$userData = json_decode($userDetails,true);
+	$accountData = json_decode($accountDetails,true);
 	
-	public function getData($username){
-		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
-							(Windows NT 6.1; WOW64) 
-							AppleWebKit/537.36 (KHTML, like Gecko) 
-							Chrome/47.0.2526.111 
-							Safari/537.36 
-							OPR/34.0.2036.50'
-						)
-					);
-					
-		$context  = stream_context_create($options);
-		error_reporting(~E_WARNING);
-		if(($instaLink = file_get_contents('https://www.instagram.com/' . $username, false, $context)) == false){
-			echo "Error: Link not found, user-id is invalid";
-			exit;
-		}
-		
-		return $instaLink;
+	if($userData['id'] == ""){
+		header("Location:index.php");
 	}
-	
-	public function fetchUserDetails($username){
-		
-		$instaLink = $this->getData($username);
-		$instaIDPattern = '/window._sharedData = (.*)/';
-		if (!preg_match($instaIDPattern, $instaLink, $matches)) {
-			exit;
-		}
-		$trim_data = substr($matches[1], 0, -10);
-		$json_output = json_decode($trim_data,true);
-		$json_output = $json_output['entry_data']['ProfilePage']['0']['user'];
-		
-		return $json_output;
-	}
-	
-	public function fetchAccountDetails($username){
-		
-		$details = "";
-		$instaLink = $this->getData($username);
-		$detailsPattern = '/meta content=(.\d+)(.*)/';
-		if (preg_match($detailsPattern, $instaLink, $res)) {
-			if (strpos($res, '118') !== false) {
-				$details = $res[1]. "" .$res[2];
-			}
-		}
-		$input_line = substr($details, 1, -23);
-		$userDetails = preg_split("/, /", $input_line);
-		
-		return $userDetails;
-	}
-	
-	public function getUserDetails($username){
-		
-		$json_output = $this->fetchUserDetails($username);
-		$userData = array();
-		$userData['img'] = $json_output['profile_pic_url_hd'];
-		$userData['full_name'] = $json_output['full_name'];
-		$userData['username'] = $json_output['username'];
-		$userData['is_verified'] = "false";
-		if($json_output['is_verified'])
-			$userData['is_verified'] = "true";
-		else
-			$userData['is_verified'] = "false";
-		$userData['id'] = $json_output['id'];
-		$userData['instaUrl'] = "https://instagram.com/".$json_output['username'];
-		$json_userData = json_encode($userData);
-		
-		return $json_userData;
-	}
-	
-	public function getAccountDetails($username){
-		
-		$userDetails = $this->fetchAccountDetails($username);
-		$accountData = array();
-		$accountData['followers'] = $userDetails[0];
-		$accountData['follow'] = $userDetails[1];
-		$temp = preg_split("/ -/", $userDetails[2]);
-		$accountData['posts'] = $temp[0];
-		$json_accountData = json_encode($accountData);
-		
-		return $json_accountData;
-	}
+
+  #print_r($userData);
+  #print_r($accountData);
+
+ /*echo $userData['img']."<br>";
+ echo $userData['full_name']."<br>";
+ echo $userData['username']."<br>";
+ echo $userData['is_verified']."<br>";
+ echo $userData['id']."<br>";
+ echo $userData['instaUrl']."<br>";
+ echo $accountData['followers']."<br>";
+ echo $accountData['follow']."<br>";
+ echo $accountData['posts']."<br>";*/
 }
+else{
+	header("Location:index.php");
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Card</title>
+  
+  
+  
+      <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/paper/bootstrap.min.css">
+  
+</head>
+
+<body>
+
+    <div class="card">
+      <?php $image = $userData['img']; echo "<div class='card-header'
+    style='background-image: url($image)'
+      >";?>
+            <div class="card-header-bar">
+              <a href="javascript:void(0);" class="btn-message"><span class="sr-only">Message</span></a>
+              <a href="javascript:void(0);" class="btn-menu"><span class="sr-only">Menu</span></a>
+            </div>
+
+            <div class="card-header-slanted-edge">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200"><path class="polygon" d="M-20,200,1000,0V200Z" /></svg>
+                <?php $link = $userData['instaUrl']; echo "<a href='$link' target='_blank' class='btn-follow'><span class='sr-only'>Follow</span></a>"; ?>
+            </div>
+      </div>
+
+      <div class="card-body">
+          <?php $name = $userData['full_name']; echo "<h2 class='name'>{$name}</h2>"; ?>
+          <?php $uname = $userData['username']; echo "<h4 class='job-title'>Username: {$uname}</h4>"; ?>
+          <?php $vaccount = $userData['is_verified']; echo"<div class='bio'>Verified Account: {$vaccount}</div>"; ?>
+          <div class="social-accounts">
+            <?php $urllink = $userData['instaUrl']; echo "<a href=''><img src='https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077480/profile-card/images/instagram.svg' target='_blank' alt=''><span class='sr-only'>Instagram</span></a>"; ?>
+          </div>
+      </div>
+
+      <div class="card-footer">
+          <div class="stats">
+              <div class="stat">
+                <span class="label">Followers</span>
+                <?php $followers = preg_split("/ /", $accountData['followers']); echo "<span class='value'>{$followers[0]}</span>";?>
+              </div>
+              <div class="stat">
+                <span class="label">Following</span>
+                <?php $follow = preg_split("/ /", $accountData['follow']); echo "<span class='value'>{$follow[0]}</span>";?>
+              </div>
+              <div class="stat">
+                <span class="label">Posts</span>
+                <?php $posts = preg_split("/ /", $accountData['posts']); echo "<span class='value'>{$posts[0]}</span>";?>
+              </div>
+          </div>
+      </div>
+  </div>
+  <center>
+	<a href="index.php" class="btn btn-primary">Get Back</a>
+  </center>
+  
+
+</body>
+
+</html>
+-->
