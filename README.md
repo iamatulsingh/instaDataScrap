@@ -5,21 +5,34 @@ Insta Data Scrap is an API to scrap some details of any Instagram users using th
 Example: 
 ```
   require_once('insta_data_scrap.class.php');
-  $username = $_POST['username'];
+  $username = "username";
   $insta = new InstaData();
   $userDetails = $insta->getUserDetails($username);
   $accountDetails = $insta->getAccountDetails($username);
   $userData = json_decode($userDetails,true);
   $accountData = json_decode($accountDetails,true);
+  $timeLine = $insta->getTimeLine($username);
 ```
   
 ## Use this to print details
   ```
+  
+  $count = $timeLine['count'];
+  $timeLineData = $timeLine['data'];
+
+  for($i=0;$i<$count;$i++){
+      echo $timeLineData[$i]['post_img'] . "<br>";
+      echo $timeLineData[$i]['post_txt'] . "<br>";
+      echo $timeLineData[$i]['post_time'] . "<br>";
+      echo $timeLineData[$i]['post_likes'] . "<br>";
+      echo $timeLineData[$i]['post_comments'] . "<br>";
+  }
+  
   print_r($userData);
   print_r($accountData);
   ```
   
-## You can also use to print in human redable format
+## You can print UserData and AccountData in human redable format below code
   ```
   echo $userData['img'];
   echo $userData['full_name'];
