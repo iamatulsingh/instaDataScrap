@@ -42,7 +42,6 @@ class InstaData{
 		$trim_data = substr($matches[1], 0, -10);
 		$json_output = json_decode($trim_data,true);
 		$json_output = $json_output['entry_data']['ProfilePage']['0']['graphql']['user'];
-		
 		return $json_output;
 	}
 	
@@ -60,6 +59,33 @@ class InstaData{
 		$userDetails = preg_split("/, /", $input_line);
 		
 		return $userDetails;
+	}
+	
+	public function getTimeLine($username){
+		$instaLink = $this->getData($username);
+		$instaIDPattern = '/window._sharedData = (.*)/';
+		if (!preg_match($instaIDPattern, $instaLink, $matches)) {
+			exit;
+		}
+		$trim_data = substr($matches[1], 0, -10);
+		$json_output = json_decode($trim_data,true);
+		$json_output = $json_output['entry_data']['ProfilePage']['0']['graphql']['user']['edge_owner_to_timeline_media']['edges'];
+		$count = count($json_output);
+		$timeLine = Array();
+		for($i=0;$i<$count;$i++){
+			$post_txt = $json_output[$i]['node']['edge_media_to_caption']['edges']['0']['node']['text'];
+			$post_img = $json_output[$i]['node']['display_url'];
+			$post_likes = $json_output[$i]['node']['edge_liked_by']['count'];
+			$post_comments = $json_output[$i]['node']['edge_media_to_comment']['count'];
+			$post_time = $json_output[$i]['node']['taken_at_timestamp'];
+			$date = new DateTime("@$post_time");
+			$timeLine[$i]['post_img'] = $post_img;
+			$timeLine[$i]['post_txt'] = $post_txt;
+			$timeLine[$i]['post_time'] = $date->format('Y-m-d H:i:s');
+			$timeLine[$i]['post_likes'] = $post_likes;
+			$timeLine[$i]['post_comments'] = $post_comments;
+		}
+		return Array('data'=>$timeLine,'count'=>$count);
 	}
 	
 	public function getUserDetails($username){
