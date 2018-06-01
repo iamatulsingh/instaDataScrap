@@ -44,5 +44,3 @@ Example:
   echo $accountData['follow'];
   echo $accountData['posts'];
   ```
-  
-> I recommend you to use Instagram API to fetch data as offered by Instagram
