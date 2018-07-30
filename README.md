@@ -32,7 +32,7 @@ Example:
   print_r($accountData);
   ```
   
-## You can print UserData and AccountData in human redable format below code
+## You can print UserData and AccountData in readable format using below code
   ```
   echo $userData['img'];
   echo $userData['full_name'];
