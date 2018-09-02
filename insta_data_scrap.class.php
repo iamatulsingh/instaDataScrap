@@ -119,4 +119,50 @@ class InstaData{
 		
 		return $json_accountData;
 	}
+	
+	public function getHashTageData($hashtag){
+		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
+							(Windows NT 6.1; WOW64) 
+							AppleWebKit/537.36 (KHTML, like Gecko) 
+							Chrome/47.0.2526.111 
+							Safari/537.36 
+							OPR/34.0.2036.50'
+						)
+					);
+					
+		$context  = stream_context_create($options);
+		error_reporting(~E_WARNING);
+		if(($hashtagData = file_get_contents('https://www.instagram.com/explore/tags/' . $hashtag . '/?__a=1', false, $context)) == false){
+			echo "Error: Link not found";
+			exit;
+		}
+		
+		return $hashtagData;
+	}
+
+	public function getTagLikes($hashtag){
+		$instaHashtag = $this->getHashTageData($hashtag);
+		$json_output = json_decode($instaHashtag,true);
+		$likes = $json_output['graphql']['hashtag']['edge_hashtag_to_media']['count'];
+		return $likes;
+	}
+
+	public function getTagData($hashtag){
+		$instaHashtag = $this->getHashTageData($hashtag);
+		$json_output = json_decode($instaHashtag,true);
+		$json_output = $json_output['graphql']['hashtag']['edge_hashtag_to_media']['edges'];
+		$count = count($json_output);
+		$hashtag_data = Array();
+		for($i=0;$i<$count;$i++){
+			error_reporting(~E_NOTICE);
+			$txt = $json_output[$i]['node']['edge_media_to_caption']['edges']['0']['node']['text'];
+			$post_img = $json_output[$i]['node']['display_url'];
+			$hashtag_time = $json_output[$i]['node']['taken_at_timestamp'];
+			$date = new DateTime("@$hashtag_time");
+			$hashtag_data[$i]['hashtag_img'] = $post_img;
+			$hashtag_data[$i]['hashtag_txt'] = $txt;
+			$hashtag_data[$i]['hashtag_time'] = $date->format('Y-m-d H:i:s');
+		}
+		return Array('data'=>$hashtag_data,'count'=>$count);
+	}
 }
