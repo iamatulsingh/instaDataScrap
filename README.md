@@ -1,6 +1,8 @@
 # Insta Data Scrap
 Insta Data Scrap is an API to scrap some details of any Instagram users using thier username. Using this API you can scrap some details even if account is in private mode. It dosen't need Instagram API to fetch data by using Access Token.
 
+>New code added to get hashtag data using instagram API.
+
 ## How to use it?
 Example: 
 ```
@@ -12,6 +14,23 @@ Example:
   $userData = json_decode($userDetails,true);
   $accountData = json_decode($accountDetails,true);
   $timeLine = $insta->getTimeLine($username);
+```
+
+## How to get hashtag data
+
+```
+  $hashtag_likes = $insta->getTagLikes('photooftheday'); // here 'photooftheday' is hashtag string
+  $hashtag_details = $insta->getTagData('photooftheday');
+  
+  echo $hashtag_likes . "<br><br>";
+  $count = $hashtag_details['count'];
+  $hastagData = $hashtag_details['data'];
+
+  for($i=0;$i<$count;$i++){
+    echo $hastagData[$i]['hashtag_img'] . "<br>";
+    echo $hastagData[$i]['hashtag_txt'] . "<br>";
+    echo $hastagData[$i]['hashtag_time'] . "<br>";
+  }
 ```
   
 ## Use this to print details
