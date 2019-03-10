@@ -1,9 +1,14 @@
 # Insta Data Scrap
 Insta Data Scrap is an API to scrap some details of any Instagram users using their username. Using this API you can scrap some details even if account is in private mode. It dosen't need Instagram API to fetch data by using Access Token.
 
->New code added to get hashtag data using instagram API.
+>New code added to get data as API in json.
 
-## How to use it?
+## How to use it, using API call?
+Example:
+
+Just fetch API using ```http://domain.com/api.php?u=username```.
+
+## How to use it, using Class import?
 Example: 
 ```
   require_once('insta_data_scrap.class.php');
