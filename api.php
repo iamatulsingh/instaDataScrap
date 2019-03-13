@@ -33,7 +33,7 @@ Telegram - https://t.me/developeratul
 		$instaData->timeLineData = $timeLine;
 		$instaData->hashTagLikes = $tagLikes;
 		$instaData->tagData = $tagData;
-		echo json_encode($instaData);
+		echo json_encode($instaData, JSON_PRETTY_PRINT);
 
 	}else{
 		echo '';
