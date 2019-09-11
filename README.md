@@ -1,7 +1,7 @@
 # Insta Data Scrap
 Insta Data Scrap is an API to scrap some details of any Instagram users using their username. Using this API you can scrap some details even if account is in private mode. It dosen't need Instagram API to fetch data by using Access Token.
 
->New code added to get data from API.
+>New code added to get data from calling API (this unofficial one).
 
 ## How to use it, using API call?
 Example:
