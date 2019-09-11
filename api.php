@@ -23,41 +23,49 @@ Telegram - https://t.me/developeratul
 		$userDetails = $insta->getUserDetails($username);
 		$accountDetails = $insta->getAccountDetails($username);
 		$timeLine = $insta->getTimeLine($username);
-		$tagLikes = $insta->getTagLikes($username);
-		$tagData = $insta->getTagData($username);
+		// $tagLikes = $insta->getTagLikes($username);
 
 		// create single json array with all data
 		error_reporting(~E_WARNING);
 		$instaData->userDetails = $userDetails;
 		$instaData->accountDetails = $accountDetails;
 		$instaData->timeLineData = $timeLine;
-		$instaData->hashTagLikes = $tagLikes;
-		$instaData->tagData = $tagData;
+		// $instaData->hashTagLikes = $tagLikes;
+		// $instaData->tagData = $tagData;
 		echo json_encode($instaData, JSON_PRETTY_PRINT);
 
-	}else{
+	}
+	if($_GET['hashtag'] != ""){
+		echo "else if running";
+		$insta = new InstaData();
+		$hastag = $_GET['hashtag'];
+		$tagData = $insta->getTagData($hastag);
+		// echo $tagData;
+		echo json_encode($tagData, JSON_PRETTY_PRINT);
+	}
+	else{
 		echo '';
 	}
 
 class InstaData{
-	
+
 	public function getData($username){
 		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'
 						)
 					);
-					
+
 		$context  = stream_context_create($options);
 		error_reporting(~E_WARNING);
 		if(($instaLink = file_get_contents('https://www.instagram.com/' . $username, false, $context)) == false){
 			echo "Error: Link not found, user-id is invalid";
 			exit;
 		}
-		
+
 		return $instaLink;
 	}
-	
+
 	public function fetchUserDetails($username){
-		
+
 		$instaLink = $this->getData($username);
 		$instaIDPattern = '/window._sharedData = (.*)/';
 		if (!preg_match($instaIDPattern, $instaLink, $matches)) {
@@ -68,9 +76,9 @@ class InstaData{
 		$json_output = $json_output['entry_data']['ProfilePage']['0']['graphql']['user'];
 		return $json_output;
 	}
-	
+
 	public function fetchAccountDetails($username){
-		
+
 		$details = "";
 		$instaLink = $this->getData($username);
 		$detailsPattern = '/meta content=(.\d+)(.*)/';
@@ -81,10 +89,10 @@ class InstaData{
 		}
 		$input_line = substr($details, 1, -23);
 		$userDetails = preg_split("/, /", $input_line);
-		
+
 		return $userDetails;
 	}
-	
+
 	public function getTimeLine($username){
 		$instaLink = $this->getData($username);
 		$instaIDPattern = '/window._sharedData = (.*)/';
@@ -97,6 +105,7 @@ class InstaData{
 		$count = count($json_output);
 		$timeLine = Array();
 		for($i=0;$i<$count;$i++){
+			error_reporting(~E_NOTICE);
 			$post_txt = $json_output[$i]['node']['edge_media_to_caption']['edges']['0']['node']['text'];
 			$post_img = $json_output[$i]['node']['display_url'];
 			$post_likes = $json_output[$i]['node']['edge_liked_by']['count'];
@@ -111,9 +120,9 @@ class InstaData{
 		}
 		return Array('data'=>$timeLine,'count'=>$count);
 	}
-	
+
 	public function getUserDetails($username){
-		
+
 		$json_output = $this->fetchUserDetails($username);
 		$userData = array();
 		$userData['img'] = $json_output['profile_pic_url_hd'];
@@ -127,13 +136,13 @@ class InstaData{
 		$userData['id'] = $json_output['id'];
 		$userData['instaUrl'] = "https://instagram.com/".$json_output['username'];
 		// $json_userData = json_encode($userData);
-		
+
 		// return $json_userData;
 		return $userData;
 	}
-	
+
 	public function getAccountDetails($username){
-		
+
 		$userDetails = $this->fetchAccountDetails($username);
 		$accountData = array();
 		$accountData['followers'] = $userDetails[0];
@@ -141,7 +150,7 @@ class InstaData{
 		$temp = preg_split("/ -/", $userDetails[2]);
 		$accountData['posts'] = $temp[0];
 		// $json_accountData = json_encode($accountData);
-		
+
 		// return $json_accountData;
 		return $accountData;
 	}
@@ -150,22 +159,22 @@ class InstaData{
 // New code added here
 
 	public function getHashTageData($hashtag){
-		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
-							(Windows NT 6.1; WOW64) 
-							AppleWebKit/537.36 (KHTML, like Gecko) 
-							Chrome/47.0.2526.111 
-							Safari/537.36 
+		$options  = array('http' => array('user_agent' => 'Mozilla/5.0
+							(Windows NT 6.1; WOW64)
+							AppleWebKit/537.36 (KHTML, like Gecko)
+							Chrome/47.0.2526.111
+							Safari/537.36
 							OPR/34.0.2036.50'
 						)
 					);
-					
+
 		$context  = stream_context_create($options);
 		error_reporting(~E_WARNING);
 		if(($hashtagData = file_get_contents('https://www.instagram.com/explore/tags/' . $hashtag . '/?__a=1', false, $context)) == false){
-			echo "Error: Link not found";
+			echo "Error: Hash tag value is not available for " . $hashtag;
 			exit;
 		}
-		
+
 		return $hashtagData;
 	}
 
