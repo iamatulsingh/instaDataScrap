@@ -42,12 +42,7 @@ Telegram - https://t.me/developeratul
 class InstaData{
 	
 	public function getData($username){
-		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
-							(Windows NT 6.1; WOW64) 
-							AppleWebKit/537.36 (KHTML, like Gecko) 
-							Chrome/47.0.2526.111 
-							Safari/537.36 
-							OPR/34.0.2036.50'
+		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'
 						)
 					);
 					
