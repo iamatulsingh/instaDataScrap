@@ -120,7 +120,7 @@ class InstaData{
 		return $json_accountData;
 	}
 	
-	public function getHashTageData($hashtag){
+	public function getHashTagData($hashtag){
 		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
 							(Windows NT 6.1; WOW64) 
 							AppleWebKit/537.36 (KHTML, like Gecko) 
@@ -141,14 +141,14 @@ class InstaData{
 	}
 
 	public function getTagLikes($hashtag){
-		$instaHashtag = $this->getHashTageData($hashtag);
+		$instaHashtag = $this->getHashTagData($hashtag);
 		$json_output = json_decode($instaHashtag,true);
 		$likes = $json_output['graphql']['hashtag']['edge_hashtag_to_media']['count'];
 		return $likes;
 	}
 
 	public function getTagData($hashtag){
-		$instaHashtag = $this->getHashTageData($hashtag);
+		$instaHashtag = $this->getHashTagData($hashtag);
 		$json_output = json_decode($instaHashtag,true);
 		$json_output = $json_output['graphql']['hashtag']['edge_hashtag_to_media']['edges'];
 		$count = count($json_output);
