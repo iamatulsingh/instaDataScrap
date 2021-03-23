@@ -13,12 +13,7 @@ Telegram - https://t.me/developeratul
 class InstaData{
 	
 	public function getData($username){
-		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
-							(Windows NT 6.1; WOW64) 
-							AppleWebKit/537.36 (KHTML, like Gecko) 
-							Chrome/47.0.2526.111 
-							Safari/537.36 
-							OPR/34.0.2036.50'
+		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 						)
 					);
 					
@@ -51,7 +46,7 @@ class InstaData{
 		$instaLink = $this->getData($username);
 		$detailsPattern = '/meta content=(.\d+)(.*)/';
 		if (preg_match($detailsPattern, $instaLink, $res)) {
-			if (strpos($res, '118') !== false) {
+			if (strpos($res, 'Followers') !== false) {
 				$details = $res[1]. "" .$res[2];
 			}
 		}
