@@ -27,11 +27,8 @@ Telegram - https://t.me/developeratul
 
 		// create single json array with all data
 		error_reporting(~E_WARNING);
-		$instaData->userDetails = $userDetails;
-		$instaData->accountDetails = $accountDetails;
-		$instaData->timeLineData = $timeLine;
-		// $instaData->hashTagLikes = $tagLikes;
-		// $instaData->tagData = $tagData;
+		$instaData = array("userDetails"=>$userDetails, "accountDetails"=>$accountDetails, "timeLineData"=>$timeLine,
+		                "hashTagLikes"=>$tagLikes, "tagData"=>$tagData);
 		echo json_encode($instaData, JSON_PRETTY_PRINT);
 
 	}
@@ -83,7 +80,7 @@ class InstaData{
 		$instaLink = $this->getData($username);
 		$detailsPattern = '/meta content=(.\d+)(.*)/';
 		if (preg_match($detailsPattern, $instaLink, $res)) {
-			if (strpos($res, '118') !== false) {
+			if (strpos($res[0], 'Followers') !== false) {
 				$details = $res[1]. "" .$res[2];
 			}
 		}
