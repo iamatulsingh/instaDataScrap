@@ -116,12 +116,7 @@ class InstaData{
 	}
 	
 	public function getHashTagData($hashtag){
-		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 
-							(Windows NT 6.1; WOW64) 
-							AppleWebKit/537.36 (KHTML, like Gecko) 
-							Chrome/47.0.2526.111 
-							Safari/537.36 
-							OPR/34.0.2036.50'
+		$options  = array('http' => array('user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 						)
 					);
 					
