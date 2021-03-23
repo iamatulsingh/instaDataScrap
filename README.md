@@ -1,5 +1,5 @@
 # Insta Data Scrap
-[![built with PHP8](https://img.shields.io/badge/built%20with-PHP7-blue.svg)](https://www.php.net/) </br>
+[![built with PHP8](https://img.shields.io/badge/built%20with-PHP8-blue.svg)](https://www.php.net/) </br>
 Insta Data Scrap is an API to scrap some details of any Instagram users using their username. Using this API you can scrap some details even if account is in private mode. It dosen't need Instagram API to fetch data by using Access Token.
 
 >New code added to get data from calling API (this unofficial one).
