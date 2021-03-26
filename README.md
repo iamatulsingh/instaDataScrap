@@ -7,6 +7,7 @@ Insta Data Scrap is an API to scrap some details of any Instagram users using th
 ## How to use it, using API call?
 Example:
 
+- NOTE: allow_url_fopen must be enable in php.ini
 Just fetch API using ```http://domain.com/api.php?u=username```.
 fetch hashtag data using API ```http://domain.com/api.php?hashtag=tag```.
 
