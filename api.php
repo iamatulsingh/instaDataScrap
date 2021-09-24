@@ -103,7 +103,7 @@ class InstaData{
 		$timeLine = Array();
 		for($i=0;$i<$count;$i++){
 			error_reporting(~E_NOTICE);
-			$post_txt = $json_output[$i]['node']['edge_media_to_caption']['edges']['0']['node']['text'];
+			$post_txt = $json_output[$i]['node']['edge_media_to_caption']['edges'] ? $json_output[$i]['node']['edge_media_to_caption']['edges']['0']['node']['text'] : "";
 			$post_img = $json_output[$i]['node']['display_url'];
 			$post_likes = $json_output[$i]['node']['edge_liked_by']['count'];
 			$post_comments = $json_output[$i]['node']['edge_media_to_comment']['count'];
